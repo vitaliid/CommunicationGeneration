@@ -24,7 +24,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     @Override
     public Generation getById(Long id) {
-        return generationRepository.getById(id);
+        return generationRepository.findById(id).orElse(null);
     }
 
     @Override
