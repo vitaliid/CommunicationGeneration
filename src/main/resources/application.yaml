@@ -9,7 +9,7 @@ spring:
     password: 27af9e2765eb53a294c394b35aa0bb047954bff131b44df72f0236bef1c8f7ea
     hikari:
       connection-timeout: 30000
-      maximum-pool-size: 20
+      maximum-pool-size: 10
   jpa:
     open-in-view: false
   liquibase:
