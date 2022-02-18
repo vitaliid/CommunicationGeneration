@@ -3,10 +3,9 @@ package com.sdarm.generation.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -20,4 +19,7 @@ public class Generation {
 
     @Column(name = "name")
     private String name;
+
+    @Transient
+    private List<Gang> gangs = new ArrayList<>();
 }
