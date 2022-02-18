@@ -1,0 +1,21 @@
+server:
+  port: ${PORT:5000}
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://ec2-44-193-188-118.compute-1.amazonaws.com:5432/deq9fv4gdppsot
+    username: vxlafteubyfdnr
+    password: 27af9e2765eb53a294c394b35aa0bb047954bff131b44df72f0236bef1c8f7ea
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 20
+  liquibase:
+    enabled: false
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration, org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+
+logging:
+  level:
+    org:
+      springframework: INFO
