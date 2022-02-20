@@ -25,11 +25,7 @@ public class GenerationFacade {
 
     public List<GenerationResponse> getAll() {
         return generationService.getAll().stream()
-                .map(generation -> GenerationResponse.builder()
-                        .id(generation.getId())
-                        .name(generation.getName())
-                        .timeOfRequest(Instant.now())
-                        .build())
+                .map(this::convert)
                 .collect(Collectors.toList());
     }
 
