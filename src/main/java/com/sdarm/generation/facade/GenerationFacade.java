@@ -4,19 +4,18 @@ import com.sdarm.generation.domain.Algorithm;
 import com.sdarm.generation.domain.Gang;
 import com.sdarm.generation.domain.Generation;
 import com.sdarm.generation.domain.GenerationProcess;
-import com.sdarm.generation.dto.GangResponse;
-import com.sdarm.generation.dto.GenerationCreateRequest;
-import com.sdarm.generation.dto.GenerationResponse;
-import com.sdarm.generation.dto.GenerationProcessResponse;
+import com.sdarm.generation.dto.*;
 import com.sdarm.generation.repository.GenerationProcessRepository;
 import com.sdarm.generation.service.GenerationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,19 +34,34 @@ public class GenerationFacade {
 
     public GenerationResponse getById(Long id) {
         Generation generation;
+        GenerationProcess generationProcess = null;
         if (id == null || id == 0) {
             generation = generationService.generate(Algorithm.GENDER_IS_THE_SAME);
         } else {
             generation = generationService.getById(id);
+            generationProcess = Optional.ofNullable(generation)
+                    .map(Generation::getId)
+                    .map(generationId -> generationProcessRepository.findByGenerationId(generation.getId()))
+                    .orElse(null);
         }
-        return convert(generation, null);
+
+        return convert(generation, generationProcess);
     }
 
     public GenerationResponse getLatest() {
         Generation generation = generationService.getLatest();
-        return convert(generation, null);
+        GenerationProcess generationProcess = generationProcessRepository.findByGenerationId(generation.getId());
+        if (generationProcess == null) {
+            generationProcess = generationProcessRepository.findTopByOrderByCreatedAtDesc();
+            if (generationProcess.getGenerationId() != null) {
+                generationProcess = null;
+            }
+        }
+
+        return convert(generation, generationProcess);
     }
 
+    @Transactional
     public GenerationResponse create(GenerationCreateRequest request) {
         Generation generation = convert(request);
         generation = generationService.save(generation);
@@ -56,6 +70,7 @@ public class GenerationFacade {
         return convert(generation, null);
     }
 
+    @Transactional
     public GenerationResponse generate(Long duration, Algorithm algorithm, boolean prepared) {
         GenerationProcess generationProcess = new GenerationProcess();
         generationProcess.setDuration(duration);
@@ -69,6 +84,31 @@ public class GenerationFacade {
             generation = generationService.save(generation);
             generationProcess.setGenerationId(generation.getId());
             generationProcessRepository.save(generationProcess);
+        }
+
+        return convert(generation, generationProcess);
+    }
+
+    @Transactional
+    public GenerationResponse finish(Long processId, GenerationProcessFinalizeRequest request) {
+        final GenerationProcess generationProcess;
+        Generation generation = null;
+
+        if (processId != null) {
+            generationProcess = generationProcessRepository.findById(processId).orElse(null);
+        } else {
+            generationProcess = generationProcessRepository.findTopByOrderByCreatedAtDesc();
+        }
+
+        if (generationProcess != null && generationProcess.getGenerationId() == null && request.getGenerationId() != null) {
+            generation = generationService.getById(request.getGenerationId());
+            if (generation != null) {
+                generationProcess.setGenerationId(request.getGenerationId());
+                generationProcessRepository.save(generationProcess);
+            }
+            generationProcess.setGenerationId(request.getGenerationId());
+        } else if (generationProcess != null && generationProcess.getGenerationId() != null) {
+            generation = generationService.getById(generationProcess.getGenerationId());
         }
 
         return convert(generation, generationProcess);
@@ -88,6 +128,10 @@ public class GenerationFacade {
     }
 
     private GenerationResponse convert(Generation generation, GenerationProcess generationProcess) {
+        if (generation == null) {
+            generation = new Generation();
+        }
+
         List<GangResponse> gangs = generation.getGangs().stream()
                 .map(gang ->
                         GangResponse.builder()
@@ -113,8 +157,10 @@ public class GenerationFacade {
 
     private GenerationProcessResponse convert(GenerationProcess generationProcess) {
         return GenerationProcessResponse.builder()
+                .id(generationProcess.getId())
                 .createdAt(generationProcess.getCreatedAt())
                 .duration(generationProcess.getDuration())
+                .generationId(generationProcess.getGenerationId())
                 .build();
     }
 }

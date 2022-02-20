@@ -11,6 +11,8 @@ import java.time.Instant;
 @Builder
 public class GenerationProcessResponse {
 
+    private Long id;
     private Instant createdAt;
     private long duration;
+    private Long generationId;
 }

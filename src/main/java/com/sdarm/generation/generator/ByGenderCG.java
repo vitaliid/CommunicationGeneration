@@ -35,6 +35,10 @@ public class ByGenderCG implements CommunicationGenerator {
         generation.getGangs().addAll(createGangs(males));
         generation.getGangs().addAll(createGangs(females));
 
+        for (Gang gang : generation.getGangs()) {
+            gang.setGeneration(generation);
+        }
+
         generation.setCreatedAt(Instant.now());
         return generation;
     }

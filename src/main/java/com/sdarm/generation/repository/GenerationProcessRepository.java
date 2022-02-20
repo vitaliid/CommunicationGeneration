@@ -5,4 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GenerationProcessRepository extends JpaRepository<GenerationProcess, Long> {
 
+    GenerationProcess findTopByOrderByCreatedAtDesc();
+
+    GenerationProcess findByGenerationId(Long generationId);
 }
