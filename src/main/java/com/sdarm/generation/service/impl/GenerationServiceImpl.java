@@ -29,6 +29,11 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
     @Override
+    public Generation getLatest() {
+        return generationRepository.findTopByOrderByCreatedAtDesc();
+    }
+
+    @Override
     public Generation generate(Algorithm algorithm) {
         final CommunicationGenerator communicationGenerator =
                 communicationGeneratorFactory.getCommunicationGenerator(algorithm);

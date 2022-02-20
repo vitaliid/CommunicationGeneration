@@ -20,6 +20,11 @@ public class GenerationController {
         return generationFacade.getAll();
     }
 
+    @GetMapping("latest")
+    public GenerationResponse get() {
+        return generationFacade.getLatest();
+    }
+
     @GetMapping("{id}")
     public GenerationResponse get(@PathVariable Long id) {
         return generationFacade.getById(id);

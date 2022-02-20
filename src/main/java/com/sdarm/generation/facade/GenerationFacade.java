@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +40,11 @@ public class GenerationFacade {
         } else {
             generation = generationService.getById(id);
         }
+        return convert(generation);
+    }
+
+    public GenerationResponse getLatest() {
+        Generation generation = generationService.getLatest();
         return convert(generation);
     }
 

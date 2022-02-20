@@ -11,6 +11,8 @@ public interface GenerationService {
 
     Generation getById(Long id);
 
+    Generation getLatest();
+
     Generation generate(Algorithm algorithm);
 
     Generation save(Generation generation);

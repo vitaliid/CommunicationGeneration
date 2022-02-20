@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,4 +29,7 @@ public class Generation {
             fetch = FetchType.EAGER
     )
     private List<Gang> gangs = new ArrayList<>();
+
+    @Column(name = "created_at")
+    private Instant createdAt;
 }
