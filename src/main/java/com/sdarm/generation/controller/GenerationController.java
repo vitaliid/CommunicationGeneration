@@ -1,16 +1,10 @@
 package com.sdarm.generation.controller;
 
-import com.sdarm.generation.GenerationFacade;
+import com.sdarm.generation.dto.GenerationCreateRequest;
+import com.sdarm.generation.service.GenerationFacade;
 import com.sdarm.generation.dto.GenerationResponse;
-import com.sdarm.generation.service.GenerationService;
-import com.sdarm.generation.domain.Generation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +25,9 @@ public class GenerationController {
         return generationFacade.getById(id);
     }
 
+    @PostMapping
+    public GenerationResponse create(@RequestBody GenerationCreateRequest generationCreateRequest) {
+        return generationFacade.create(generationCreateRequest);
+    }
 
 }

@@ -15,11 +15,17 @@ import java.util.List;
 public class Generation {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
     private String name;
 
-    @Transient
+    @OneToMany(
+            mappedBy = "generation",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
     private List<Gang> gangs = new ArrayList<>();
 }

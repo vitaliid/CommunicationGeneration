@@ -1,10 +1,11 @@
-package com.sdarm.generation.service;
+package com.sdarm.generation.service.impl;
 
 import com.sdarm.generation.domain.Algorithm;
 import com.sdarm.generation.domain.Generation;
 import com.sdarm.generation.generator.CommunicationGenerator;
 import com.sdarm.generation.generator.CommunicationGeneratorFactory;
 import com.sdarm.generation.repository.GenerationRepository;
+import com.sdarm.generation.service.GenerationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,11 @@ public class GenerationServiceImpl implements GenerationService {
                 communicationGeneratorFactory.getCommunicationGenerator(algorithm);
 
         return communicationGenerator.generate();
+    }
+
+    @Override
+    public Generation save(Generation generation) {
+        return generationRepository.save(generation);
     }
 
 
