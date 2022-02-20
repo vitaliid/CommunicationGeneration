@@ -1,4 +1,4 @@
-package com.sdarm.generation.service;
+package com.sdarm.generation.facade;
 
 import com.sdarm.generation.domain.Algorithm;
 import com.sdarm.generation.domain.Gang;
@@ -6,6 +6,7 @@ import com.sdarm.generation.domain.Generation;
 import com.sdarm.generation.dto.GangResponse;
 import com.sdarm.generation.dto.GenerationCreateRequest;
 import com.sdarm.generation.dto.GenerationResponse;
+import com.sdarm.generation.service.GenerationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

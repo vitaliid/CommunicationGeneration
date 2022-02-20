@@ -1,7 +1,7 @@
 package com.sdarm.generation.controller;
 
 import com.sdarm.generation.dto.GenerationCreateRequest;
-import com.sdarm.generation.service.GenerationFacade;
+import com.sdarm.generation.facade.GenerationFacade;
 import com.sdarm.generation.dto.GenerationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +16,12 @@ public class GenerationController {
     private final GenerationFacade generationFacade;
 
     @GetMapping
-    public List<GenerationResponse> get() {
+    public List<GenerationResponse> getAll() {
         return generationFacade.getAll();
     }
 
     @GetMapping("{id}")
-    public GenerationResponse getById(@PathVariable Long id) {
+    public GenerationResponse get(@PathVariable Long id) {
         return generationFacade.getById(id);
     }
 
