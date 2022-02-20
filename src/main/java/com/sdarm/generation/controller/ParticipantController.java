@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin
 @Slf4j
 @RestController
 @RequestMapping("api/v1/participants")
@@ -19,7 +20,6 @@ public class ParticipantController {
 
     private final ParticipantFacade participantFacade;
 
-    @CrossOrigin
     @GetMapping
     public List<ParticipantResponse> getAll() {
         log.info("Request for getting all participants");
