@@ -7,6 +7,7 @@ import com.sdarm.generation.domain.Participant;
 import com.sdarm.generation.repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +35,7 @@ public class ByGenderCG implements CommunicationGenerator {
         generation.getGangs().addAll(createGangs(males));
         generation.getGangs().addAll(createGangs(females));
 
+        generation.setCreatedAt(Instant.now());
         return generation;
     }
 

@@ -1,5 +1,6 @@
 package com.sdarm.generation.controller;
 
+import com.sdarm.generation.domain.Algorithm;
 import com.sdarm.generation.dto.GenerationCreateRequest;
 import com.sdarm.generation.facade.GenerationFacade;
 import com.sdarm.generation.dto.GenerationResponse;
@@ -42,4 +43,11 @@ public class GenerationController {
         return generationFacade.create(generationCreateRequest);
     }
 
+    @PostMapping("start")
+    public GenerationResponse create(@RequestParam(required = false, defaultValue = "900") long duration,
+                                     @RequestParam(required = false, defaultValue = "false") boolean prepared,
+                                     @RequestParam(required = false, defaultValue = "GENDER_IS_THE_SAME") Algorithm algorithm) {
+        log.info("Request for generating of ready generation with duration {}", duration);
+        return generationFacade.generate(duration, algorithm, prepared);
+    }
 }
