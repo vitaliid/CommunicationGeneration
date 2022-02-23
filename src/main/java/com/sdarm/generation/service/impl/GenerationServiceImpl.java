@@ -9,6 +9,7 @@ import com.sdarm.generation.service.GenerationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -38,7 +39,9 @@ public class GenerationServiceImpl implements GenerationService {
         final CommunicationGenerator communicationGenerator =
                 communicationGeneratorFactory.getCommunicationGenerator(algorithm);
 
-        return communicationGenerator.generate();
+        Generation generation = communicationGenerator.generate();
+        Collections.shuffle(generation.getGangs());
+        return generation;
     }
 
     @Override
