@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class ByGenderCG implements CommunicationGenerator {
 
         Generation generation = new Generation();
         generation.setId(0L);
-        generation.setName("Test generation");
+        generation.setName("Prepared generation " + UUID.randomUUID());
 
         List<Participant> males = all.stream().filter(participant -> participant.getGender() == Gender.MALE).collect(Collectors.toList());
         List<Participant> females = all.stream().filter(participant -> participant.getGender() == Gender.FEMALE).collect(Collectors.toList());

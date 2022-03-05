@@ -71,7 +71,7 @@ public class GenerationFacade {
     }
 
     @Transactional
-    public GenerationResponse generate(Long duration, Algorithm algorithm, boolean prepared) {
+    public GenerationResponse generate(String name, Long duration, Algorithm algorithm, boolean prepared) {
         GenerationProcess generationProcess = new GenerationProcess();
         generationProcess.setDuration(duration);
         generationProcess.setAlgorithm(algorithm);
@@ -84,6 +84,10 @@ public class GenerationFacade {
             generation = generationService.save(generation);
             generationProcess.setGenerationId(generation.getId());
             generationProcessRepository.save(generationProcess);
+        }
+
+        if (name != null) {
+            generation.setName(name);
         }
 
         return convert(generation, generationProcess);

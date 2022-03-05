@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin
 @Slf4j
@@ -45,11 +46,13 @@ public class GenerationController {
     }
 
     @PostMapping("start")
-    public GenerationResponse startProcess(@RequestParam(required = false, defaultValue = "900") long duration,
+    public GenerationResponse startProcess(@RequestParam(required = false) String name,
+                                           @RequestParam(required = false, defaultValue = "900") long duration,
                                            @RequestParam(required = false, defaultValue = "false") boolean prepared,
-                                           @RequestParam(required = false, defaultValue = "GENDER_IS_THE_SAME") Algorithm algorithm) {
+                                           @RequestParam(required = false, defaultValue = "GENDER_IS_THE_SAME") Algorithm algorithm
+    ) {
         log.info("Request for creating process of generation with duration {}", duration);
-        return generationFacade.generate(duration, algorithm, prepared);
+        return generationFacade.generate(name, duration, algorithm, prepared);
     }
 
     @PostMapping({"finish", "finish/{processId}"})
