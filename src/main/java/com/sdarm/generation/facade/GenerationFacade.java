@@ -94,9 +94,8 @@ public class GenerationFacade {
     }
 
     @Transactional
-    public GenerationResponse finish(Long processId, GenerationProcessFinalizeRequest request) {
+    public GenerationResponse finish(Long processId, Long generationId) {
         final GenerationProcess generationProcess;
-        Generation generation = null;
 
         if (processId != null) {
             generationProcess = generationProcessRepository.findById(processId).orElse(null);
@@ -104,15 +103,14 @@ public class GenerationFacade {
             generationProcess = generationProcessRepository.findTopByOrderByCreatedAtDesc();
         }
 
-        if (generationProcess != null && generationProcess.getGenerationId() == null && request.getGenerationId() != null) {
-            generation = generationService.getById(request.getGenerationId());
-            if (generation != null) {
-                generationProcess.setGenerationId(request.getGenerationId());
-                generationProcessRepository.save(generationProcess);
-            }
-            generationProcess.setGenerationId(request.getGenerationId());
-        } else if (generationProcess != null && generationProcess.getGenerationId() != null) {
-            generation = generationService.getById(generationProcess.getGenerationId());
+        if (generationProcess == null) {
+            return null;
+        }
+
+        Generation generation = generationService.getById(generationId);
+        if (generation != null) {
+            generationProcess.setGenerationId(generation.getId());
+            generationProcessRepository.save(generationProcess);
         }
 
         return convert(generation, generationProcess);

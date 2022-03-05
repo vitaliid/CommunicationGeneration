@@ -2,15 +2,13 @@ package com.sdarm.generation.controller;
 
 import com.sdarm.generation.domain.Algorithm;
 import com.sdarm.generation.dto.GenerationCreateRequest;
-import com.sdarm.generation.dto.GenerationProcessFinalizeRequest;
-import com.sdarm.generation.facade.GenerationFacade;
 import com.sdarm.generation.dto.GenerationResponse;
+import com.sdarm.generation.facade.GenerationFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @CrossOrigin
 @Slf4j
@@ -55,10 +53,10 @@ public class GenerationController {
         return generationFacade.generate(name, duration, algorithm, prepared);
     }
 
-    @PostMapping({"finish", "finish/{processId}"})
-    public GenerationResponse finishProcess(@RequestBody GenerationProcessFinalizeRequest request,
+    @PostMapping({"{id}/finish", "{id}/finish/{processId}"})
+    public GenerationResponse finishProcess(@PathVariable("id") Long generationId,
                                             @PathVariable(required = false) Long processId) {
         log.info("Request for finalization of generation process");
-        return generationFacade.finish(processId, request);
+        return generationFacade.finish(processId, generationId);
     }
 }
