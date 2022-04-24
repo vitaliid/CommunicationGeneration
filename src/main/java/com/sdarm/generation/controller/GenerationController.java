@@ -25,16 +25,22 @@ public class GenerationController {
         return generationFacade.getAll();
     }
 
+    @GetMapping("{id}")
+    public GenerationResponse get(@PathVariable Long id) {
+        log.info("Request for getting generation with id {}", id);
+        return generationFacade.getById(id);
+    }
+
     @GetMapping("latest")
     public GenerationResponse get() {
         log.info("Request for getting the latest generation");
         return generationFacade.getLatest();
     }
 
-    @GetMapping("{id}")
-    public GenerationResponse get(@PathVariable Long id) {
-        log.info("Request for getting generation with id {}", id);
-        return generationFacade.getById(id);
+    @GetMapping("generate")
+    public GenerationResponse get(@RequestParam(defaultValue = "GENDER_IS_THE_SAME") Algorithm algorithm) {
+        log.info("Request for getting the latest generation");
+        return generationFacade.generate(algorithm);
     }
 
     @PostMapping
@@ -50,7 +56,7 @@ public class GenerationController {
                                            @RequestParam(required = false, defaultValue = "GENDER_IS_THE_SAME") Algorithm algorithm
     ) {
         log.info("Request for creating process of generation with duration {}", duration);
-        return generationFacade.generate(name, duration, algorithm, prepared);
+        return generationFacade.start(name, duration, algorithm, prepared);
     }
 
     @PostMapping({"{id}/finish", "{id}/finish/{processId}"})

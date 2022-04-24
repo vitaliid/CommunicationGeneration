@@ -1,21 +1,21 @@
-package com.sdarm.generation.generator;
+package com.sdarm.generation.generator.algo;
 
 import com.sdarm.generation.domain.Gang;
 import com.sdarm.generation.domain.Gender;
 import com.sdarm.generation.domain.Generation;
 import com.sdarm.generation.domain.Participant;
+import com.sdarm.generation.generator.CommunicationGenerator;
 import com.sdarm.generation.repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class ByGenderCG implements CommunicationGenerator {
+public class WithOppositeGender implements CommunicationGenerator {
 
     private final ParticipantRepository participantRepository;
 
@@ -33,40 +33,24 @@ public class ByGenderCG implements CommunicationGenerator {
         Collections.shuffle(males);
         Collections.shuffle(females);
 
-        generation.getGangs().addAll(createGangs(males));
-        generation.getGangs().addAll(createGangs(females));
-
-        for (Gang gang : generation.getGangs()) {
+        for (int i = 0; i < Math.min(males.size(), females.size()); i++) {
+            Gang gang = new Gang();
             gang.setGeneration(generation);
+            gang.getGangsters().add(males.get(i));
+            gang.getGangsters().add(females.get(i));
+            generation.getGangs().add(gang);
         }
+
+        /*
+        if (males.size() < females.size()) {
+            int difference = females.size() - males.size();
+            int additionalGirlsPerGroup = (int) Math.ceil(difference / generation.getGangs().size());
+            for (int i = 0; i < generation.getGangs().size(); i = i + additionalGirlsPerGroup) {
+
+            }
+        }*/
 
         generation.setCreatedAt(Instant.now());
         return generation;
-    }
-
-    private List<Gang> createGangs(List<Participant> participants) {
-        List<Gang> gangs = new ArrayList<>();
-
-        Gang prevGang = null;
-        for (int i = 0; i <= (participants.size() - 1) / 2; i++) {
-            Gang gang = new Gang();
-
-
-            final int leftGangster = i;
-            final int rightGangster = participants.size() - 1 - i;
-
-            if (leftGangster == rightGangster && prevGang != null) {
-                prevGang.getGangsters().add(participants.get(leftGangster));
-                continue;
-            }
-
-            gang.getGangsters().add(participants.get(leftGangster));
-            gang.getGangsters().add(participants.get(rightGangster));
-
-            prevGang = gang;
-            gangs.add(gang);
-        }
-
-        return gangs;
     }
 }

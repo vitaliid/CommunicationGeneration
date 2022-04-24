@@ -13,6 +13,6 @@ public class GenerationProcessResponse {
 
     private Long id;
     private Instant createdAt;
-    private long duration;
+    private Long duration;
     private Long generationId;
 }
